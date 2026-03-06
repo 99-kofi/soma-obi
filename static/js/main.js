@@ -259,26 +259,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (audioUrl && role === 'ai') {
             audioBtn = document.createElement('button');
             audioBtn.className = 'audio-play-btn';
-            audioBtn.innerHTML = `
-                <svg class="countdown-svg" viewBox="0 0 40 40">
-                    <circle class="countdown-bg" cx="20" cy="20" r="18"></circle>
-                    <circle class="countdown-ring" cx="20" cy="20" r="18"></circle>
-                </svg>
-                <i data-lucide="volume-2"></i>
-                <span class="countdown-text"></span>
-            `;
+            audioBtn = document.createElement('button');
+            audioBtn.className = 'audio-play-btn';
+            audioBtn.innerHTML = `<i data-lucide="volume-2"></i>`;
             audioBtn.title = "Listen to response";
-            audioBtn.onclick = () => {
-                if (audioBtn.countdown) {
-                    clearTimeout(audioBtn.countdown.timer);
-                    clearInterval(audioBtn.countdown.interval);
-                    audioBtn.classList.remove('counting');
-                    audioBtn.countdown = null;
-                    playAudio(audioUrl, audioBtn);
-                } else {
-                    playAudio(audioUrl, audioBtn);
-                }
-            };
+            audioBtn.onclick = () => playAudio(audioUrl, audioBtn);
             bubbleContentRow.appendChild(audioBtn);
         }
 
@@ -300,55 +285,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (role === 'ai') {
             typeText(content, text, () => {
                 if (audioUrl && audioBtn) {
-                    startTtsCountdown(audioBtn, 12, () => {
-                        playAudio(audioUrl, audioBtn);
-                    });
+                    playAudio(audioUrl, audioBtn);
                 }
             });
         }
     }
 
-    function startTtsCountdown(btn, duration, onComplete) {
-        if (btn.classList.contains('playing')) return;
-
-        btn.classList.add('counting');
-        const ring = btn.querySelector('.countdown-ring');
-        const text = btn.querySelector('.countdown-text');
-
-        let timeLeft = duration;
-        text.textContent = timeLeft;
-
-        // Reset ring
-        ring.style.strokeDashoffset = '0';
-
-        const interval = setInterval(() => {
-            timeLeft--;
-            if (timeLeft >= 0) {
-                text.textContent = timeLeft > 0 ? timeLeft : '';
-            }
-        }, 1000);
-
-        const timer = setTimeout(() => {
-            clearInterval(interval);
-            btn.classList.remove('counting');
-            btn.countdown = null;
-            onComplete();
-        }, duration * 1000);
-
-        btn.countdown = { timer, interval };
-    }
-
     function typeText(element, text, onComplete) {
         let i = 0;
-        const speed = 25; // ms per char - snappier
+        const speed = 25;
         function type() {
             if (i < text.length) {
                 element.textContent += text.charAt(i);
                 i++;
-                scrollToBottom();
+                if (i % 4 === 0) scrollToBottom();
                 setTimeout(type, speed);
-            } else if (onComplete) {
-                onComplete();
+            } else {
+                scrollToBottom();
+                if (onComplete) onComplete();
             }
         }
         type();
