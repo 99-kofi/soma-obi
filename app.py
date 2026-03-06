@@ -9,7 +9,9 @@ import asyncio
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, 
+            static_folder='static',
+            template_folder='templates')
 # Explicitly allow all origins, headers, and methods
 CORS(app, resources={r"/*": {"origins": "*"}})
 app.secret_key = os.getenv("SECRET_KEY", "super_secret_soma_obi_key")
