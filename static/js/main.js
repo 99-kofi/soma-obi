@@ -241,6 +241,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const bubble = document.createElement('div');
         bubble.className = `message-bubble ${role === 'ai' ? 'soma-bubble' : 'user-bubble'}`;
 
+        const bubbleContentRow = document.createElement('div');
+        bubbleContentRow.className = 'bubble-content-row';
+
         const content = document.createElement('p');
         content.className = 'message-content';
 
@@ -250,12 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             content.textContent = text;
         }
 
-        const time = document.createElement('span');
-        time.className = 'message-time';
-        time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        bubble.appendChild(content);
-        bubble.appendChild(time);
+        bubbleContentRow.appendChild(content);
 
         let audioBtn = null;
         if (audioUrl && role === 'ai') {
@@ -281,8 +279,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     playAudio(audioUrl, audioBtn);
                 }
             };
-            bubble.appendChild(audioBtn);
+            bubbleContentRow.appendChild(audioBtn);
         }
+
+        const time = document.createElement('span');
+        time.className = 'message-time';
+        time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        bubble.appendChild(bubbleContentRow);
+        bubble.appendChild(time);
 
         row.appendChild(avatarWrapper);
         row.appendChild(bubble);

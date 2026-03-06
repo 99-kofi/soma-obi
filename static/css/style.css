@@ -183,6 +183,13 @@ body {
     box-shadow: 0 4px 15px hsla(0, 72%, 51%, 0.3);
 }
 
+.bubble-content-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
 .message-content {
     font-size: 1.05rem;
     font-weight: 400;
@@ -201,16 +208,14 @@ body {
     margin-top: 0.75rem;
 }
 
-/* Audio Play Button - Refined */
+/* Audio Play Button - Refined & Inline */
 .audio-play-btn {
-    position: absolute;
-    right: -3rem;
-    top: 0.5rem;
+    flex-shrink: 0;
     background: var(--bg-glass);
     border: 1px solid var(--glass-border);
     color: var(--accent-red);
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -218,6 +223,7 @@ body {
     cursor: pointer;
     transition: var(--transition-smooth);
     box-shadow: 0 4px 10px hsla(0, 0%, 0%, 0.2);
+    margin-top: 0.2rem;
 }
 
 .audio-play-btn i {
@@ -783,10 +789,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     }
 
     .audio-play-btn {
-        right: 0.5rem;
-        top: calc(100% + 10px);
-        transform: none;
-        position: relative;
+        /* Button now stays beside the text due to flex row */
     }
 
     .app-footer {
