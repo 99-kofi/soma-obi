@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soma Obi | Soulful Connections</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/soma.png') }}">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Three.js for Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+    <div id="canvas-container"></div>
+
+    <!-- Aesthetic Welcome Screen -->
+    <section id="welcome-screen" class="welcome-screen">
+        <video autoplay muted loop playsinline id="welcome-video">
+            <source src="{{ url_for('static', filename='video/kem.mp4') }}" type="video/mp4">
+        </video>
+        <div class="welcome-overlay"></div>
+        <div class="welcome-content">
+            <p class="welcome-quote">"Speak your truth, and let the wind carry the weight away."</p>
+            <button id="enter-btn" class="enter-btn glass-premium">
+                ENTER THE AURA
+                <div class="btn-glow"></div>
+            </button>
+            <p class="brand-subtext small">POWERED BY WAIT TECHNOLOGIES</p>
+        </div>
+    </section>
+
+    <main class="app-container hidden">
+        <!-- Premium Header -->
+        <header class="app-header glass-premium">
+            <div class="header-actions">
+                <button class="action-btn" id="about-btn" title="About">
+                    <i data-lucide="info"></i>
+                </button>
+                <button class="action-btn" id="settings-btn" title="Settings">
+                    <i data-lucide="settings"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic Chat Area -->
+        <section id="messages-area" class="messages-area scroll-container">
+            <div class="messages-wrapper">
+                <!-- Welcome Message -->
+                <div class="message-row system">
+                    <div class="avatar-wrapper">
+                        <div class="avatar soma-aura">
+                            <i data-lucide="sparkles"></i>
+                        </div>
+                    </div>
+                    <div class="message-bubble soma-bubble">
+                        <p class="message-content">
+                            Hello, I am Soma Obi. I am here to provide a safe space for you. What is on your soul today?
+                        </p>
+                        <span class="message-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Precision Input Area -->
+        <footer class="app-footer">
+            <div class="input-container-wrapper">
+                <form id="chat-form" class="input-bar glass-premium">
+                    <button type="button" id="mic-button" class="input-tool-btn mic-btn" title="Voice Input">
+                        <i data-lucide="mic"></i>
+                        <span class="pulse-ring"></span>
+                    </button>
+
+                    <div class="input-field-wrapper">
+                        <input type="text" id="user-input" placeholder="Whisper to Soma..." autocomplete="off">
+                        <div class="focus-glow"></div>
+                    </div>
+
+                    <button type="submit" id="send-button" class="input-tool-btn send-btn" disabled
+                        title="Send Message">
+                        <i data-lucide="send"></i>
+                    </button>
+                </form>
+                <p class="brand-subtext">CRAFTED FOR GHANA • POWERED BY BLACKO & WAIT TECHNOLOGIES</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Modal Overlay System -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-container glass-premium">
+            <header class="modal-header">
+                <h2 id="modal-title">Title</h2>
+                <button id="close-modal" class="close-btn">
+                    <i data-lucide="x"></i>
+                </button>
+            </header>
+            <div id="modal-body" class="modal-body">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/three_env.js') }}"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

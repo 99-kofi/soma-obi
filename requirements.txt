@@ -1,0 +1,11 @@
+flask
+flask-cors
+python-dotenv
+google-generativeai
+gradio_client
+httpx
+gunicorn
+# fastapi dependencies if needed for future reference, but not for Flask app
+# fastapi 
+# uvicorn
+
