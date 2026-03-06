@@ -23,7 +23,9 @@ AUDIO_DIR = "/tmp/audio" if IS_VERCEL else os.path.join(os.getcwd(), "static", "
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
 # Initialize AI Engine and TTS Engine
+print("Initializing AI Engine...")
 ai_engine = AIEngine()
+print("Initializing TTS Engine...")
 tts_engine = TTSEngine()
 
 @app.route('/')

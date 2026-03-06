@@ -4,14 +4,8 @@ import shutil
 
 class TTSEngine:
     def __init__(self):
-        try:
-            # Increase timeout to 180 seconds for slow TTS generation
-            self.client = Client("YatharthS/LuxTTS", httpx_kwargs={"timeout": 180})
-        except Exception as e:
-            print(f"Failed to initialize TTSEngine: {e}")
-            self.client = None
-
-        # Path relative to project root (kemosabe/)
+        self.client = None
+        # Path relative to this file's location to be robust on Vercel
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.ref_audio_path = os.path.join(project_root, "voice_models", "poppop.ai - blacko_vocals.mp3")
         
@@ -19,12 +13,24 @@ class TTSEngine:
         self.rms = 0.018          # RMS normalization
         self.ref_duration = 5    # Reference audio duration in seconds
         self.t_shift = 0.9       # Time shift parameter
-        self.num_steps = 4       # Number of inference steps (Reduced for speed)
+        self.num_steps = 4       # Number of inference steps
         self.speed = 0.82        # Speech speed
         self.return_smooth = True  # Smooth audio output
 
+    def _get_client(self):
+        """Lazy initialization of the Gradio client"""
+        if self.client is None:
+            try:
+                print("Initializing LuxTTS Client...")
+                self.client = Client("YatharthS/LuxTTS", httpx_kwargs={"timeout": 300})
+            except Exception as e:
+                print(f"Failed to initialize TTSEngine: {e}")
+                return None
+        return self.client
+
     def generate_speech(self, text: str, output_path: str = "static/audio/output_voice_clone.wav", speed: float = None):
-        if not self.client:
+        client = self._get_client()
+        if not client:
             print("TTS Engine not initialized. Skipping speech generation.")
             return None
 
@@ -42,7 +48,7 @@ class TTSEngine:
             return None
 
         try:
-            result = self.client.predict(
+            result = client.predict(
                 text=text,
                 audio_prompt=handle_file(self.ref_audio_path),
                 rms=self.rms,
@@ -62,7 +68,6 @@ class TTSEngine:
             shutil.copy(result, output_path)
             return output_path
         elif isinstance(result, (list, tuple)) and len(result) > 0:
-            # Handle potential list response (LuxTTS may return tuple)
             res_path = result[0] if isinstance(result[0], str) else result
             if isinstance(res_path, str) and os.path.exists(res_path):
                 shutil.copy(res_path, output_path)

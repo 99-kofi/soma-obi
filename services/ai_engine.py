@@ -16,8 +16,8 @@ class AIEngine:
     async def get_response(self, user_input: str, history: List[Dict[str, str]] = None) -> str:
         # Use a fresh client for every request to ensure no state pollution from previous loops
         try:
-            # We use a short timeout for initialization
-            client = await asyncio.to_thread(Client, "yuntian-deng/ChatGPT", httpx_kwargs={"timeout": 60})
+            # Increase timeout for ChatGPT on Vercel
+            client = await asyncio.to_thread(Client, "yuntian-deng/ChatGPT", httpx_kwargs={"timeout": 120})
         except Exception as e:
             print(f"Client initialization error: {e}")
             return "Soma Obi is offline. Please check your connection."
