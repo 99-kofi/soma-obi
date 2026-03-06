@@ -171,8 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     };
 
-    async function handleChat(message) {
-        if (!message.trim()) return;
+    async function handleSend(providedMessage = null) {
+        const message = providedMessage || userInput.value.trim();
+        if (!message) return;
 
         userInput.value = '';
         updateSendButtonState();
