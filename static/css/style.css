@@ -227,8 +227,10 @@ body {
 }
 
 .audio-play-btn i {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
+    transition: var(--transition-smooth);
+    z-index: 2;
 }
 
 .audio-play-btn:hover {
@@ -313,11 +315,26 @@ body {
 }
 
 .audio-play-btn.counting .countdown-text {
-    opacity: 1;
+    opacity: 0.8;
 }
 
 .audio-play-btn.counting i {
-    opacity: 0;
+    opacity: 0.3;
+    animation: icon-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes icon-pulse {
+
+    0%,
+    100% {
+        transform: scale(0.9);
+        opacity: 0.2;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.5;
+    }
 }
 
 @keyframes countdown-fill {

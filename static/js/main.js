@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (role === 'ai') {
             typeText(content, text, () => {
                 if (audioUrl && audioBtn) {
-                    startTtsCountdown(audioBtn, 15, () => {
+                    startTtsCountdown(audioBtn, 12, () => {
                         playAudio(audioUrl, audioBtn);
                     });
                 }
