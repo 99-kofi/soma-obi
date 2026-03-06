@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let recognition = null;
     let sessionId = localStorage.getItem('soma_obi_session_id');
     let userId = localStorage.getItem('soma_obi_user_id');
+    let chatHistory = [];
 
     // Settings State
     let ttsSpeed = parseFloat(localStorage.getItem('soma_obi_tts_speed')) || 0.82;
