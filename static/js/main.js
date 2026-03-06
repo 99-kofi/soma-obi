@@ -221,7 +221,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error(error);
             removeTypingIndicator(typingId);
-            appendMessage('ai', "Chale, the connection is weak. Let's try again.");
+            appendMessage('ai', "Chale, the connection is heavy right now. Try sending that again, or refresh the aura.");
+            // Remove the failed user message from history so retry works cleanly
+            chatHistory.pop();
         }
     }
 

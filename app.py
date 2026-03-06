@@ -54,13 +54,16 @@ async def chat():
         # 1. Get AI response (Fast)
         ai_response = await ai_engine.get_response(user_message, history=history)
         
+        import urllib.parse
+        encoded_text = urllib.parse.quote(ai_response)
+        
         # 2. Return response with a direct URL that triggers audio generation
         return jsonify({
             "response": ai_response,
             "session_id": session_id,
             "user_id": user_id,
             "message_id": message_id,
-            "audio_url": f"/api/audio-gen/{message_id}?text={ai_response}"
+            "audio_url": f"/api/audio-gen/{message_id}?text={encoded_text}"
         })
 
     except Exception as e:

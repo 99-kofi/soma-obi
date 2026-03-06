@@ -6,6 +6,7 @@ import asyncio
 class AIEngine:
     def __init__(self):
         self.persona_name = "Soma Obi"
+        self.client = None
         self.base_prompt = (
             "You are Soma Obi, a professional and warm mental health assistant. "
             "Use Standard English ONLY. No slang or pidgin. "
@@ -13,12 +14,22 @@ class AIEngine:
             "Acknowledge the user's feelings and provide varied, sympathetic guidance."
         )
 
+    def _get_client(self):
+        """Lazy initialization of the Gradio client"""
+        if self.client is None:
+            try:
+                print("Initializing ChatGPT Client Singleton...")
+                from gradio_client import Client
+                self.client = Client("yuntian-deng/ChatGPT", httpx_kwargs={"timeout": 120})
+            except Exception as e:
+                print(f"Failed to initialize ChatGPT Engine: {e}")
+                return None
+        return self.client
+
     async def get_response(self, user_input: str, history: List[List[str]] = None) -> str:
-        try:
-            client = await asyncio.to_thread(Client, "yuntian-deng/ChatGPT", httpx_kwargs={"timeout": 120})
-        except Exception as e:
-            print(f"Client initialization error: {e}")
-            return "Soma Obi is offline. Please check your connection."
+        client = await asyncio.to_thread(self._get_client)
+        if not client:
+            return "Soma Obi is currently offline. Please refresh and try again."
 
         # Format history for Gradio ChatGPT [/predict input format]
         # Gradio usually expects history as a list of [user_msg, bot_msg] pairs
