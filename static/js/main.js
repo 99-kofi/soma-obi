@@ -165,18 +165,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 messagesWrapper.innerHTML = '';
                 // Optional: append welcome message back
                 appendMessage('system', "A fresh start. What is on your soul today?");
+                chatHistory = []; // Clear chat history
                 hideModal();
             }
         };
     };
 
-    async function handleSend() {
-        const message = userInput.value.trim();
-        if (!message) return;
+    async function handleChat(message) {
+        if (!message.trim()) return;
 
         userInput.value = '';
         updateSendButtonState();
         appendMessage('user', message);
+
+        chatHistory.push(["User", message]);
+        // Keep history manageable (last 5 exchanges, 10 messages total)
+        if (chatHistory.length > 10) chatHistory.shift();
 
         const typingId = appendTypingIndicator();
         scrollToBottom();
@@ -187,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message,
+                    history: chatHistory,
                     session_id: sessionId,
                     user_id: userId
                 }),
@@ -205,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const aiText = data.response || "I hear you, but the wind carries my words away. Speak again.";
+            chatHistory.push(["AI", aiText]);
             const baseUrl = data.audio_url;
             const audioUrl = `${baseUrl}&speed=${ttsSpeed}`;
 

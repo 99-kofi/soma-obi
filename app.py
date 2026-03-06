@@ -36,6 +36,7 @@ def home():
 async def chat():
     data = request.json
     user_message = data.get('message')
+    history = data.get('history', [])
     user_id = data.get('user_id')
     session_id = data.get('session_id')
 
@@ -51,7 +52,7 @@ async def chat():
 
     try:
         # 1. Get AI response (Fast)
-        ai_response = await ai_engine.get_response(user_message)
+        ai_response = await ai_engine.get_response(user_message, history=history)
         
         # 2. Return response with a direct URL that triggers audio generation
         return jsonify({

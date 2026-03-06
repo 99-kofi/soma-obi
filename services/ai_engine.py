@@ -9,30 +9,35 @@ class AIEngine:
         self.base_prompt = (
             "You are Soma Obi, a professional and warm mental health assistant. "
             "Use Standard English ONLY. No slang or pidgin. "
-            "STRICT BREVITY: Your response MUST be under 150 characters (1-2 short sentences). "
-            "Be extremely concise."
+            "Keep your responses concise and meaningful (under 200 characters). "
+            "Acknowledge the user's feelings and provide varied, sympathetic guidance."
         )
 
-    async def get_response(self, user_input: str, history: List[Dict[str, str]] = None) -> str:
-        # Use a fresh client for every request to ensure no state pollution from previous loops
+    async def get_response(self, user_input: str, history: List[List[str]] = None) -> str:
         try:
-            # Increase timeout for ChatGPT on Vercel
             client = await asyncio.to_thread(Client, "yuntian-deng/ChatGPT", httpx_kwargs={"timeout": 120})
         except Exception as e:
             print(f"Client initialization error: {e}")
             return "Soma Obi is offline. Please check your connection."
 
-        # Simplify prompt for directness
-        final_input = f"{self.base_prompt}\n\nUser: {user_input}"
-        
+        # Format history for Gradio ChatGPT [/predict input format]
+        # Gradio usually expects history as a list of [user_msg, bot_msg] pairs
+        formatted_history = []
+        if history:
+            # The frontend sends [["User", "msg"], ["AI", "msg"]]
+            # We need to pair them up if they aren't already
+            for i in range(0, len(history), 2):
+                if i + 1 < len(history):
+                    formatted_history.append([history[i][1], history[i+1][1]])
+
         try:
             result = await asyncio.to_thread(
                 client.predict,
-                inputs=final_input,
+                inputs=f"{self.base_prompt}\n\nUser: {user_input}",
                 top_p=1,
-                temperature=0.7,
-                chat_counter=0,
-                chatbot=[], 
+                temperature=1.0, # Increased for more variety
+                chat_counter=len(formatted_history),
+                chatbot=formatted_history, 
                 api_name="/predict"
             )
             
